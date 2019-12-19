@@ -1,11 +1,16 @@
 package com.oggtechnologies.salvos.gamerunner
 
 import android.util.Log
-import com.oggtechnologies.salvos.model.Updater
-import com.oggtechnologies.salvos.view.Representer
 
-class DefaultGameRunner(private val updater: Updater, private val representer: Representer) :
+class DefaultGameRunner(private val updater: Updater, private val renderer: Renderer) :
     GameRunner {
+
+    override var fps: Int = 0
+        private set
+    override var ups: Int = 0
+        private set
+
+
     @Volatile
     private var playing = true
     private var gameThread: Thread = Thread(this)
@@ -42,13 +47,15 @@ class DefaultGameRunner(private val updater: Updater, private val representer: R
                 updates++
                 delta--
             }
-            representer.represent()
+            renderer.render()
             frames++
             // Runs 1 time each second
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000
                 //System.out.println(updates + " ups, " + frames + " fps");
+                ups = updates
                 updates = 0
+                fps = frames
                 frames = 0
             }
         }
