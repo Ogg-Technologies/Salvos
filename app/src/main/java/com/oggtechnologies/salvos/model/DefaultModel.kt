@@ -1,17 +1,11 @@
 package com.oggtechnologies.salvos.model
 
 import com.oggtechnologies.salvos.gamerunner.Updater
+import com.oggtechnologies.salvos.model.map.TileMap
 
 class DefaultModel : Updater, ModelViewer, ModelController {
-    override var x = 0
-        private set
-    private var vel = 3
+    override val tileMap = TileMap()
 
     override fun update() {
-        x += vel
-    }
-
-    override fun changeDirection() {
-        vel = -vel
     }
 }

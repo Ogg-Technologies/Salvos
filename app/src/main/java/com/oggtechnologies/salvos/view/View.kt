@@ -1,16 +1,33 @@
 package com.oggtechnologies.salvos.view
 
 import android.graphics.Canvas
-import android.graphics.Paint
 import com.oggtechnologies.salvos.model.ModelViewer
+import com.oggtechnologies.salvos.model.map.tiles.Tile
+import com.oggtechnologies.salvos.model.map.tiles.TileFactory
+import com.oggtechnologies.salvos.utilities.Square
+import com.oggtechnologies.salvos.utilities.Vector
+import com.oggtechnologies.salvos.view.drawers.tiledrawers.GroundDrawer
+import com.oggtechnologies.salvos.view.drawers.tiledrawers.TileDrawer
+import com.oggtechnologies.salvos.view.drawers.tiledrawers.WallDrawer
 
 class View(private val model: ModelViewer) {
+
+    private val tileDrawers: Map<Class<Tile>, TileDrawer> = hashMapOf(
+        TileFactory.createGround().javaClass to GroundDrawer(),
+        TileFactory.createWall().javaClass to WallDrawer()
+    )
+
     fun draw(canvas: Canvas) {
-        canvas.drawColor(-0x010101)
-        val paint = Paint()
-        paint.color = -0x551122
-        val x = model.x
-        canvas.drawCircle(x.toFloat(), 300F, 70F, paint)
+        val tileSize = 150f
+
+        for (y in 0..4) {
+            for (x in 0..4) {
+                val tile = model.tileMap.getTile(x, y)
+                val drawer = tileDrawers[tile.javaClass]
+                drawer!!.draw(Square(Vector(x.toFloat()*tileSize, y.toFloat()*tileSize), tileSize), canvas)
+            }
+        }
+
     }
 
 }

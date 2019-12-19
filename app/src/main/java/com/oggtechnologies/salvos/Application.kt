@@ -37,8 +37,11 @@ class Application(context: Context) : SurfaceView(context),
     override fun render() {
         if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
+
+            canvas.drawColor(-0x111111)
             view.draw(canvas)
             drawFpsUps(canvas)
+
             holder.unlockCanvasAndPost(canvas)
         }
     }
@@ -52,7 +55,7 @@ class Application(context: Context) : SurfaceView(context),
 
     private fun drawFpsUps(canvas: Canvas) {
         val paint = Paint()
-        paint.color = -0xffffff
+        paint.color = 0xffffff
         paint.textSize = 40F
         canvas.drawText("ups: ${gameRunner.ups} fps: ${gameRunner.fps}", 60F, 50F, paint)
     }
