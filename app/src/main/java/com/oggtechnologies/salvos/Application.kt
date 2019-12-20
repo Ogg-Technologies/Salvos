@@ -3,6 +3,7 @@ package com.oggtechnologies.salvos
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.view.MotionEvent
 import android.view.SurfaceView
@@ -11,6 +12,7 @@ import com.oggtechnologies.salvos.gamerunner.DefaultGameRunner
 import com.oggtechnologies.salvos.gamerunner.GameRunner
 import com.oggtechnologies.salvos.gamerunner.Renderer
 import com.oggtechnologies.salvos.model.DefaultModel
+import com.oggtechnologies.salvos.utilities.Vector
 import com.oggtechnologies.salvos.view.View
 
 class Application(context: Context) : SurfaceView(context),
@@ -38,8 +40,8 @@ class Application(context: Context) : SurfaceView(context),
         if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
 
-            canvas.drawColor(-0x111111)
-            view.draw(canvas)
+            canvas.drawColor(Color.DKGRAY)
+            view.draw(canvas, Vector(width.toFloat(), height.toFloat()))
             drawFpsUps(canvas)
 
             holder.unlockCanvasAndPost(canvas)
@@ -55,7 +57,7 @@ class Application(context: Context) : SurfaceView(context),
 
     private fun drawFpsUps(canvas: Canvas) {
         val paint = Paint()
-        paint.color = 0xffffff
+        paint.color = Color.WHITE
         paint.textSize = 40F
         canvas.drawText("ups: ${gameRunner.ups} fps: ${gameRunner.fps}", 60F, 50F, paint)
     }

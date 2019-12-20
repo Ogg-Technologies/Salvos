@@ -9,4 +9,16 @@ class Square(val pos: Vector, val size: Float) {
         get() = pos.y + size
     val right: Float
         get() = pos.x + size
+    val center: Vector
+        get() = pos + Vector(size / 2, size / 2);
+    val centerX: Float
+        get() = pos.x + size / 2
+    val centerY: Float
+        get() = pos.y + size / 2
+
+    companion object {
+        fun byCenter(center: Vector, size: Float) : Square {
+            return Square(center - Vector(size/2, size/2), size)
+        }
+    }
 }
