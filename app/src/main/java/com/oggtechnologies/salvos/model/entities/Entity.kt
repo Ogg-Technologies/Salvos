@@ -6,4 +6,5 @@ interface Entity {
     var pos: Vector
     var vel: Vector
     var size: Vector
+    fun update()
 }

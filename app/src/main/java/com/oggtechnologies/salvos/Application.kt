@@ -33,15 +33,18 @@ class Application(context: Context) : SurfaceView(context),
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return controller.onTouchEvent(event)
+        controller.onTouchEvent(event)
+        return true
     }
 
     override fun render() {
         if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
+            val screenSize = Vector(width.toFloat(), height.toFloat())
 
             canvas.drawColor(Color.DKGRAY)
-            view.draw(canvas, Vector(width.toFloat(), height.toFloat()))
+            view.draw(canvas, screenSize)
+            controller.draw(canvas, screenSize)
             drawFpsUps(canvas)
 
             holder.unlockCanvasAndPost(canvas)

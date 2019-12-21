@@ -12,7 +12,7 @@ import com.oggtechnologies.salvos.view.drawers.tiledrawers.TileDrawer
 import com.oggtechnologies.salvos.view.drawers.tiledrawers.WallDrawer
 
 class View(private val model: ModelViewer) {
-    val tileSize = 150f
+    private val tileSize = 150f
 
     private val tileDrawers: Map<Class<Tile>, TileDrawer> = hashMapOf(
         TileFactory.createGround().javaClass to GroundDrawer(),
@@ -22,30 +22,37 @@ class View(private val model: ModelViewer) {
     private val playerDrawer = PlayerDrawer()
 
     fun draw(canvas: Canvas, screenSize: Vector) {
-        drawTiles(canvas)
+        val player = model.player
+        drawTiles(player.pos, canvas, screenSize)
         drawPlayer(canvas, screenSize)
     }
 
     private fun drawPlayer(canvas: Canvas, screenSize: Vector) {
-        val player = model.player
         println(screenSize)
         val square = Square.byCenter(screenSize/2F, tileSize)
         playerDrawer.draw(square, canvas)
     }
 
-    private fun drawTiles(canvas: Canvas) {
-        for (y in 0 until model.tileMap.mapSize) {
-            for (x in 0 until model.tileMap.mapSize) {
-                val tile = model.tileMap.getTile(x, y)
+    private fun drawTiles(playerPos: Vector, canvas: Canvas, screenSize: Vector) {
+        val originTileScreenPos = calculateOriginTileScreenPos(playerPos, screenSize, tileSize)
+        for (tileY in 0 until model.tileMap.mapSize) {
+            for (tileX in 0 until model.tileMap.mapSize) {
+                val tile = model.tileMap.getTile(tileX, tileY)
                 val drawer = tileDrawers[tile.javaClass]
+                val tilePos = Vector(tileX.toFloat(), tileY.toFloat())
+                val screenPos = originTileScreenPos + tilePos*tileSize
                 drawer!!.draw(
                     Square(
-                        Vector(x.toFloat() * tileSize, y.toFloat() * tileSize),
+                        screenPos,
                         tileSize
                     ), canvas
                 )
             }
         }
+    }
+
+    private fun calculateOriginTileScreenPos(playerPos: Vector, screenSize: Vector, tileSize: Float): Vector {
+        return (screenSize/2F) - (playerPos*tileSize)
     }
 
 }

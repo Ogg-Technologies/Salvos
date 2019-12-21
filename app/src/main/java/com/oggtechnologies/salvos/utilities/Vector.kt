@@ -23,5 +23,6 @@ class Vector(val x: Float, val y: Float) {
 
     constructor() : this(0F, 0F)
 
-
+    val mag: Float
+        get() = Math.hypot(x.toDouble(), y.toDouble()).toFloat()
 }
