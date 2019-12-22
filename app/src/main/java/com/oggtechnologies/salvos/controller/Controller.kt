@@ -1,14 +1,25 @@
 package com.oggtechnologies.salvos.controller
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.MotionEvent
+import com.oggtechnologies.salvos.controller.gui.AbstractJoystick
+import com.oggtechnologies.salvos.controller.gui.GUIElement
 import com.oggtechnologies.salvos.model.ModelController
+import com.oggtechnologies.salvos.utilities.SharedPaint
 import com.oggtechnologies.salvos.utilities.Vector
 
 class Controller(private val model: ModelController) {
 
-    fun draw(canvas: Canvas, screenSize: Vector) {
+    val joystick: AbstractJoystick = object : AbstractJoystick(Vector(900F, 300F), 140F) {
+        override fun onDirChanged(dir: Vector) {
+            model.move(dir/200F)
+        }
+    }
 
+    fun draw(canvas: Canvas, screenSize: Vector) {
+        SharedPaint.color = Color.RED
+        canvas.drawCircle(joystick.pos.x, joystick.pos.y, joystick.radius, SharedPaint)
     }
 
     /**
@@ -34,9 +45,15 @@ class Controller(private val model: ModelController) {
         }
     }
 
-    private fun touchDown(screenPos: Vector, fingerID: Int) {}
+    private fun touchDown(screenPos: Vector, fingerID: Int) {
+        joystick.touchDown(screenPos, fingerID)
+    }
 
-    private fun touchRelease(screenPos: Vector, fingerID: Int) {}
+    private fun touchRelease(screenPos: Vector, fingerID: Int) {
+        joystick.touchRelease(screenPos, fingerID)
+    }
 
-    private fun touchMove(screenPos: Vector, fingerID: Int) {}
+    private fun touchMove(screenPos: Vector, fingerID: Int) {
+        joystick.touchMove(screenPos, fingerID)
+    }
 }

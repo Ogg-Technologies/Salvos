@@ -1,10 +1,12 @@
 package com.oggtechnologies.salvos.view
 
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import com.oggtechnologies.salvos.model.ModelViewer
 import com.oggtechnologies.salvos.model.map.tiles.Tile
 import com.oggtechnologies.salvos.model.map.tiles.TileFactory
-import com.oggtechnologies.salvos.utilities.Square
+import com.oggtechnologies.salvos.utilities.shapes.Square
 import com.oggtechnologies.salvos.utilities.Vector
 import com.oggtechnologies.salvos.view.drawers.entitydrawers.PlayerDrawer
 import com.oggtechnologies.salvos.view.drawers.tiledrawers.GroundDrawer
@@ -25,6 +27,12 @@ class View(private val model: ModelViewer) {
         val player = model.player
         drawTiles(player.pos, canvas, screenSize)
         drawPlayer(canvas, screenSize)
+
+
+        val paint = Paint()
+        paint.color = Color.WHITE
+        paint.textSize = 40F
+        canvas.drawText("X: ${model.player.pos.x} Y: ${model.player.pos.y}", 60F, 100F, paint)
     }
 
     private fun drawPlayer(canvas: Canvas, screenSize: Vector) {

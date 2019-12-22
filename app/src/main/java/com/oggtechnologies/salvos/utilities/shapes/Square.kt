@@ -1,4 +1,6 @@
-package com.oggtechnologies.salvos.utilities
+package com.oggtechnologies.salvos.utilities.shapes
+
+import com.oggtechnologies.salvos.utilities.Vector
 
 class Square(val pos: Vector, val size: Float) {
     val top: Float
@@ -10,7 +12,10 @@ class Square(val pos: Vector, val size: Float) {
     val right: Float
         get() = pos.x + size
     val center: Vector
-        get() = pos + Vector(size / 2, size / 2);
+        get() = pos + Vector(
+            size / 2,
+            size / 2
+        );
     val centerX: Float
         get() = pos.x + size / 2
     val centerY: Float
@@ -18,7 +23,12 @@ class Square(val pos: Vector, val size: Float) {
 
     companion object {
         fun byCenter(center: Vector, size: Float) : Square {
-            return Square(center - Vector(size/2, size/2), size)
+            return Square(
+                center - Vector(
+                    size / 2,
+                    size / 2
+                ), size
+            )
         }
     }
 }
