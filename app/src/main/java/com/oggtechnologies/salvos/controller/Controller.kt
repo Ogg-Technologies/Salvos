@@ -11,15 +11,19 @@ import com.oggtechnologies.salvos.utilities.Vector
 
 class Controller(private val model: ModelController) {
 
-    val joystick: AbstractJoystick = object : AbstractJoystick(Vector(900F, 300F), 140F) {
+    val joystick: AbstractJoystick = object : AbstractJoystick(Vector(300F, 760F), 150F) {
         override fun onDirChanged(dir: Vector) {
-            model.move(dir/200F)
+            model.move(dir/800F)
         }
     }
 
     fun draw(canvas: Canvas, screenSize: Vector) {
         SharedPaint.color = Color.RED
+        SharedPaint.alpha = 100
         canvas.drawCircle(joystick.pos.x, joystick.pos.y, joystick.radius, SharedPaint)
+        val joystickHead: Vector = joystick.pos+joystick.dir
+        canvas.drawCircle(joystickHead.x, joystickHead.y, joystick.radius/2, SharedPaint)
+        SharedPaint.alpha = 255
     }
 
     /**

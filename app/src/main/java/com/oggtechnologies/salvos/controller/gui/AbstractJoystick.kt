@@ -6,8 +6,8 @@ abstract class AbstractJoystick(override val pos: Vector, val radius: Float) : G
     private var lastTouchPos: Vector = pos
     private var touchedFingerID: Int? = null
 
-    private val dir: Vector
-        get() = lastTouchPos - pos
+    val dir: Vector
+        get() = (lastTouchPos - pos).clampMag(radius)
 
     override fun touchDown(screenPos: Vector, fingerID: Int) {
         if (touchIsOnJoystick(screenPos)) {

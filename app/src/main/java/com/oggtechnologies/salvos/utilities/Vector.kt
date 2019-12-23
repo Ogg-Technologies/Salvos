@@ -1,5 +1,7 @@
 package com.oggtechnologies.salvos.utilities
 
+import kotlin.math.hypot
+
 class Vector(val x: Float, val y: Float) {
     operator fun plus(v: Vector): Vector {
         return Vector(x + v.x, y + v.y)
@@ -24,5 +26,13 @@ class Vector(val x: Float, val y: Float) {
     constructor() : this(0F, 0F)
 
     val mag: Float
-        get() = Math.hypot(x.toDouble(), y.toDouble()).toFloat()
+        get() = hypot(x.toDouble(), y.toDouble()).toFloat()
+
+    fun clampMag(newMag: Float): Vector {
+        return if (newMag<mag) {
+            this*(newMag/mag)
+        } else {
+            this
+        }
+    }
 }
