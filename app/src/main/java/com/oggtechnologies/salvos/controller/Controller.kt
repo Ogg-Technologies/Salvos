@@ -11,19 +11,22 @@ import com.oggtechnologies.salvos.utilities.Vector
 
 class Controller(private val model: ModelController, private val screenSize: Vector) {
 
-    val joystick: AbstractJoystick = object : AbstractJoystick(Vector(300F, screenSize.y-300F), 150F) {
-        override fun onDirChanged(dir: Vector) {
-            model.move(dir/800F)
+    private val guiElements: MutableList<GUIElement> = ArrayList()
+
+    init {
+        val joystick: AbstractJoystick = object : AbstractJoystick(Vector(300F, screenSize.y-300F), 150F) {
+            override fun onDirChanged(dir: Vector) {
+                model.move(dir/800F)
+            }
         }
+        guiElements.add(joystick)
+
     }
 
     fun draw(canvas: Canvas) {
-        SharedPaint.color = Color.GRAY
-        SharedPaint.alpha = 150
-        canvas.drawCircle(joystick.pos.x, joystick.pos.y, joystick.radius, SharedPaint)
-        val joystickHead: Vector = joystick.pos+joystick.dir
-        canvas.drawCircle(joystickHead.x, joystickHead.y, joystick.radius/2, SharedPaint)
-        SharedPaint.alpha = 255
+        for (e in guiElements) {
+            e.draw(canvas)
+        }
     }
 
     /**
@@ -50,14 +53,20 @@ class Controller(private val model: ModelController, private val screenSize: Vec
     }
 
     private fun touchDown(screenPos: Vector, fingerID: Int) {
-        joystick.touchDown(screenPos, fingerID)
+        for (e in guiElements) {
+            e.touchDown(screenPos, fingerID)
+        }
     }
 
     private fun touchRelease(screenPos: Vector, fingerID: Int) {
-        joystick.touchRelease(screenPos, fingerID)
+        for (e in guiElements) {
+            e.touchRelease(screenPos, fingerID)
+        }
     }
 
     private fun touchMove(screenPos: Vector, fingerID: Int) {
-        joystick.touchMove(screenPos, fingerID)
+        for (e in guiElements) {
+            e.touchMove(screenPos, fingerID)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.oggtechnologies.salvos.controller.gui
 
+import android.graphics.Canvas
 import com.oggtechnologies.salvos.utilities.Vector
 
 interface GUIElement {
@@ -9,5 +10,5 @@ interface GUIElement {
 
     fun touchMove(screenPos: Vector, fingerID: Int)
 
-    val pos: Vector
+    fun draw(canvas: Canvas)
 }

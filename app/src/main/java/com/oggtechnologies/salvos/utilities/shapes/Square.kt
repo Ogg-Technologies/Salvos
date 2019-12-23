@@ -2,7 +2,7 @@ package com.oggtechnologies.salvos.utilities.shapes
 
 import com.oggtechnologies.salvos.utilities.Vector
 
-class Square(val pos: Vector, val size: Float) {
+class Square(override val pos: Vector, val size: Float) : Shape {
     val top: Float
         get() = pos.y
     val left: Float
@@ -15,7 +15,7 @@ class Square(val pos: Vector, val size: Float) {
         get() = pos + Vector(
             size / 2,
             size / 2
-        );
+        )
     val centerX: Float
         get() = pos.x + size / 2
     val centerY: Float

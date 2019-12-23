@@ -1,12 +1,15 @@
 package com.oggtechnologies.salvos.controller.gui
 
+import android.graphics.Canvas
+import android.graphics.Color
+import com.oggtechnologies.salvos.utilities.SharedPaint
 import com.oggtechnologies.salvos.utilities.Vector
 
-abstract class AbstractJoystick(override val pos: Vector, val radius: Float) : GUIElement {
+abstract class AbstractJoystick(val pos: Vector, val radius: Float) : GUIElement {
     private var lastTouchPos: Vector = pos
     private var touchedFingerID: Int? = null
 
-    val dir: Vector
+    private val dir: Vector
         get() = (lastTouchPos - pos).clampMag(radius)
 
     override fun touchDown(screenPos: Vector, fingerID: Int) {
@@ -36,5 +39,14 @@ abstract class AbstractJoystick(override val pos: Vector, val radius: Float) : G
 
     private fun touchIsOnJoystick(touchPos: Vector): Boolean {
         return (pos-touchPos).mag <= radius
+    }
+
+    override fun draw(canvas: Canvas) {
+        SharedPaint.color = Color.GRAY
+        SharedPaint.alpha = 200
+        canvas.drawCircle(pos.x, pos.y, radius, SharedPaint)
+        val ead: Vector = pos+dir
+        canvas.drawCircle(ead.x, ead.y, radius/2, SharedPaint)
+        SharedPaint.alpha = 255
     }
 }

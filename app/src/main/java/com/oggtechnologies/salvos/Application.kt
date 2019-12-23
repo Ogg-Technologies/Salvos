@@ -44,7 +44,7 @@ class Application(context: Context) : SurfaceView(context),
         if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
             if (firstFrame) {
-                firstFrameInitializations(canvas)
+                firstFrameInitializations()
                 firstFrame = false
             }
 
@@ -57,7 +57,7 @@ class Application(context: Context) : SurfaceView(context),
         }
     }
 
-    private fun firstFrameInitializations(canvas: Canvas) {
+    private fun firstFrameInitializations() {
         val screenSize = Vector(width.toFloat(), height.toFloat())
         controller = Controller(model, screenSize)
         view = View(model, screenSize)

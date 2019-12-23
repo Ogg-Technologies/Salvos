@@ -1,10 +1,10 @@
 package com.oggtechnologies.salvos.model.entities
 
 import com.oggtechnologies.salvos.utilities.Vector
+import com.oggtechnologies.salvos.utilities.shapes.Shape
 
-interface Entity {
-    var pos: Vector
+interface Entity : Shape {
     var vel: Vector
-    var size: Vector
+    fun applyForce(force: Vector)
     fun update()
 }
