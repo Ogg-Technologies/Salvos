@@ -9,17 +9,17 @@ import com.oggtechnologies.salvos.model.ModelController
 import com.oggtechnologies.salvos.utilities.SharedPaint
 import com.oggtechnologies.salvos.utilities.Vector
 
-class Controller(private val model: ModelController) {
+class Controller(private val model: ModelController, private val screenSize: Vector) {
 
-    val joystick: AbstractJoystick = object : AbstractJoystick(Vector(300F, 760F), 150F) {
+    val joystick: AbstractJoystick = object : AbstractJoystick(Vector(300F, screenSize.y-300F), 150F) {
         override fun onDirChanged(dir: Vector) {
             model.move(dir/800F)
         }
     }
 
-    fun draw(canvas: Canvas, screenSize: Vector) {
-        SharedPaint.color = Color.RED
-        SharedPaint.alpha = 100
+    fun draw(canvas: Canvas) {
+        SharedPaint.color = Color.GRAY
+        SharedPaint.alpha = 150
         canvas.drawCircle(joystick.pos.x, joystick.pos.y, joystick.radius, SharedPaint)
         val joystickHead: Vector = joystick.pos+joystick.dir
         canvas.drawCircle(joystickHead.x, joystickHead.y, joystick.radius/2, SharedPaint)

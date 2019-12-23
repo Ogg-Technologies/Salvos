@@ -18,9 +18,12 @@ import com.oggtechnologies.salvos.view.View
 class Application(context: Context) : SurfaceView(context),
     Renderer {
     private val model: DefaultModel = DefaultModel()
-    private val controller: Controller = Controller(model)
-    private val view: View = View(model)
     private val gameRunner: GameRunner = DefaultGameRunner(model, this)
+    private var firstFrame = true
+    private var screenSize: Vector? = null
+
+    private var controller: Controller? = null
+    private var view: View? = null
 
     fun resume() {
         hideAndroidUI()
@@ -33,22 +36,32 @@ class Application(context: Context) : SurfaceView(context),
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        controller.onTouchEvent(event)
+        controller?.onTouchEvent(event)
         return true
     }
 
     override fun render() {
         if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
-            val screenSize = Vector(width.toFloat(), height.toFloat())
+            if (firstFrame) {
+                firstFrameInitializations(canvas)
+                firstFrame = false
+            }
 
             canvas.drawColor(Color.DKGRAY)
-            view.draw(canvas, screenSize)
-            controller.draw(canvas, screenSize)
+            view?.draw(canvas)
+            controller?.draw(canvas)
             drawFpsUps(canvas)
 
             holder.unlockCanvasAndPost(canvas)
         }
+    }
+
+    private fun firstFrameInitializations(canvas: Canvas) {
+        val screenSize = Vector(width.toFloat(), height.toFloat())
+        controller = Controller(model, screenSize)
+        view = View(model, screenSize)
+        this.screenSize = screenSize
     }
 
     private fun hideAndroidUI() {

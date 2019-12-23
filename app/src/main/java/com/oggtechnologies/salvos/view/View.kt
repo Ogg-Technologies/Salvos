@@ -13,7 +13,7 @@ import com.oggtechnologies.salvos.view.drawers.tiledrawers.GroundDrawer
 import com.oggtechnologies.salvos.view.drawers.tiledrawers.TileDrawer
 import com.oggtechnologies.salvos.view.drawers.tiledrawers.WallDrawer
 
-class View(private val model: ModelViewer) {
+class View(private val model: ModelViewer, private val screenSize: Vector) {
     private val tileSize = 150f
 
     private val tileDrawers: Map<Class<Tile>, TileDrawer> = hashMapOf(
@@ -23,7 +23,7 @@ class View(private val model: ModelViewer) {
 
     private val playerDrawer = PlayerDrawer()
 
-    fun draw(canvas: Canvas, screenSize: Vector) {
+    fun draw(canvas: Canvas) {
         val player = model.player
         drawTiles(player.pos, canvas, screenSize)
         drawPlayer(canvas, screenSize)
