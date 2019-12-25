@@ -1,4 +1,4 @@
-package com.oggtechnologies.salvos.model.entities
+package com.oggtechnologies.salvos.model.entity.entities
 
 import com.oggtechnologies.salvos.utilities.Vector
 

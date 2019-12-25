@@ -7,7 +7,7 @@ class TileMap {
     val mapSize = 20
     private val tileMatrix: Array<Array<Tile>> = Array(mapSize) {
         y -> Array(mapSize) {
-            x -> if ((x+y)%3!=0) TileFactory.createGround() else TileFactory.createWall()
+            x -> if (Math.random()<0.1) TileFactory.createWall() else TileFactory.createGround()
         }
     }
 

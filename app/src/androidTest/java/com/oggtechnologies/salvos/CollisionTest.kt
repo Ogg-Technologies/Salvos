@@ -87,5 +87,9 @@ class CollisionTest {
         val c2 = Circle(Vector(0F, 0F), 1F)
         val r2 = Rectangle(Vector(1F, 1F), Vector(1F, 2F))
         assertFalse(r2 collidingWith c2)
+
+        val c3 = Circle(Vector(0F, 0F), 1F)
+        val r3 = Rectangle(Vector(1F, 0.1F), Vector(1F, 2F))
+        assertFalse(r3 collidingWith c3)
     }
 }

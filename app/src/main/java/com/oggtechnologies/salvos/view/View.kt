@@ -8,6 +8,7 @@ import com.oggtechnologies.salvos.model.map.tiles.Tile
 import com.oggtechnologies.salvos.model.map.tiles.TileFactory
 import com.oggtechnologies.salvos.utilities.shapes.implementations.Square
 import com.oggtechnologies.salvos.utilities.Vector
+import com.oggtechnologies.salvos.utilities.shapes.implementations.Circle
 import com.oggtechnologies.salvos.view.drawers.entitydrawers.PlayerDrawer
 import com.oggtechnologies.salvos.view.drawers.tiledrawers.GroundDrawer
 import com.oggtechnologies.salvos.view.drawers.tiledrawers.TileDrawer
@@ -37,8 +38,8 @@ class View(private val model: ModelViewer, private val screenSize: Vector) {
 
     private fun drawPlayer(canvas: Canvas, screenSize: Vector) {
         println(screenSize)
-        val square = Square.byCenter(screenSize/2F, tileSize)
-        playerDrawer.draw(square, canvas)
+        val circle = Circle(screenSize/2F, tileSize*model.player.bounds.radius)
+        playerDrawer.draw(circle, canvas)
     }
 
     private fun drawTiles(playerPos: Vector, canvas: Canvas, screenSize: Vector) {
