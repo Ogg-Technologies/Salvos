@@ -6,7 +6,7 @@ import android.graphics.Paint
 import com.oggtechnologies.salvos.model.ModelViewer
 import com.oggtechnologies.salvos.model.map.tiles.Tile
 import com.oggtechnologies.salvos.model.map.tiles.TileFactory
-import com.oggtechnologies.salvos.utilities.shapes.Square
+import com.oggtechnologies.salvos.utilities.shapes.implementations.Square
 import com.oggtechnologies.salvos.utilities.Vector
 import com.oggtechnologies.salvos.view.drawers.entitydrawers.PlayerDrawer
 import com.oggtechnologies.salvos.view.drawers.tiledrawers.GroundDrawer

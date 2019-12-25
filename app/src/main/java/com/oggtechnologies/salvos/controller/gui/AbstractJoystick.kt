@@ -4,13 +4,17 @@ import android.graphics.Canvas
 import android.graphics.Color
 import com.oggtechnologies.salvos.utilities.SharedPaint
 import com.oggtechnologies.salvos.utilities.Vector
+import com.oggtechnologies.salvos.utilities.collidingWith
+import com.oggtechnologies.salvos.utilities.shapes.implementations.Circle
+import com.oggtechnologies.salvos.utilities.shapes.implementations.Point
 
-abstract class AbstractJoystick(val pos: Vector, val radius: Float) : GUIElement {
+abstract class AbstractJoystick(pos: Vector, radius: Float) : GUIElement {
+    private val bounds = Circle(pos, radius)
     private var lastTouchPos: Vector = pos
     private var touchedFingerID: Int? = null
 
     private val dir: Vector
-        get() = (lastTouchPos - pos).clampMag(radius)
+        get() = (lastTouchPos - bounds.pos).clampMag(bounds.radius)
 
     override fun touchDown(screenPos: Vector, fingerID: Int) {
         if (touchIsOnJoystick(screenPos)) {
@@ -23,7 +27,7 @@ abstract class AbstractJoystick(val pos: Vector, val radius: Float) : GUIElement
     override fun touchRelease(screenPos: Vector, fingerID: Int) {
         if (fingerID == touchedFingerID) {
             touchedFingerID = null
-            lastTouchPos = pos
+            lastTouchPos = bounds.pos
             onDirChanged(dir)
         }
     }
@@ -38,15 +42,15 @@ abstract class AbstractJoystick(val pos: Vector, val radius: Float) : GUIElement
     abstract fun onDirChanged(dir: Vector)
 
     private fun touchIsOnJoystick(touchPos: Vector): Boolean {
-        return (pos-touchPos).mag <= radius
+        return bounds collidingWith Point(touchPos)
     }
 
     override fun draw(canvas: Canvas) {
         SharedPaint.color = Color.GRAY
         SharedPaint.alpha = 200
-        canvas.drawCircle(pos.x, pos.y, radius, SharedPaint)
-        val ead: Vector = pos+dir
-        canvas.drawCircle(ead.x, ead.y, radius/2, SharedPaint)
+        canvas.drawCircle(bounds.pos.x, bounds.pos.y, bounds.radius, SharedPaint)
+        val ead: Vector = bounds.pos+dir
+        canvas.drawCircle(ead.x, ead.y, bounds.radius/2, SharedPaint)
         SharedPaint.alpha = 255
     }
 }

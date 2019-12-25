@@ -3,7 +3,7 @@ package com.oggtechnologies.salvos.view.drawers.entitydrawers
 import android.graphics.Canvas
 import android.graphics.Color
 import com.oggtechnologies.salvos.utilities.SharedPaint
-import com.oggtechnologies.salvos.utilities.shapes.Square
+import com.oggtechnologies.salvos.utilities.shapes.implementations.Square
 
 class PlayerDrawer {
     fun draw(square: Square, canvas: Canvas) {

@@ -2,7 +2,7 @@ package com.oggtechnologies.salvos.view.drawers.tiledrawers
 
 import android.graphics.Canvas
 import android.graphics.Color
-import com.oggtechnologies.salvos.utilities.shapes.Square
+import com.oggtechnologies.salvos.utilities.shapes.implementations.Square
 import com.oggtechnologies.salvos.utilities.SharedPaint
 
 class WallDrawer : TileDrawer {
