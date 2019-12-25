@@ -16,7 +16,7 @@ class Controller(private val model: ModelController, private val screenSize: Vec
     init {
         val joystick: AbstractJoystick = object : AbstractJoystick(Vector(300F, screenSize.y-300F), 150F) {
             override fun onDirChanged(dir: Vector) {
-                model.move(dir/800F)
+                model.move(dir/10F)
             }
         }
         guiElements.add(joystick)

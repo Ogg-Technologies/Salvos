@@ -13,8 +13,10 @@ abstract class AbstractJoystick(pos: Vector, radius: Float) : GUIElement {
     private var lastTouchPos: Vector = pos
     private var touchedFingerID: Int? = null
 
-    private val dir: Vector
+    private val headDeltaPos: Vector
         get() = (lastTouchPos - bounds.pos).clampMag(bounds.radius)
+    private val dir: Vector
+        get() = headDeltaPos/bounds.radius
 
     override fun touchDown(screenPos: Vector, fingerID: Int) {
         if (touchIsOnJoystick(screenPos)) {
@@ -49,8 +51,8 @@ abstract class AbstractJoystick(pos: Vector, radius: Float) : GUIElement {
         SharedPaint.color = Color.GRAY
         SharedPaint.alpha = 200
         canvas.drawCircle(bounds.pos.x, bounds.pos.y, bounds.radius, SharedPaint)
-        val ead: Vector = bounds.pos+dir
-        canvas.drawCircle(ead.x, ead.y, bounds.radius/2, SharedPaint)
+        val head: Vector = bounds.pos+headDeltaPos
+        canvas.drawCircle(head.x, head.y, bounds.radius/2, SharedPaint)
         SharedPaint.alpha = 255
     }
 }
