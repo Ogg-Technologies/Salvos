@@ -37,9 +37,8 @@ class View(private val model: ModelViewer, private val screenSize: Vector) {
     }
 
     private fun drawPlayer(canvas: Canvas, screenSize: Vector) {
-        println(screenSize)
-        val circle = Circle(screenSize/2F, tileSize*model.player.bounds.radius)
-        playerDrawer.draw(circle, canvas)
+        val square = Square.byCenter(screenSize/2F, tileSize*model.player.bounds.size)
+        playerDrawer.draw(square, canvas)
     }
 
     private fun drawTiles(playerPos: Vector, canvas: Canvas, screenSize: Vector) {

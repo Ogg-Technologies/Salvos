@@ -8,6 +8,6 @@ import com.oggtechnologies.salvos.utilities.Vector
 
 class EntityFactory(private val worldService: WorldService) {
     fun createPlayer(x: Float, y: Float): Player {
-        return Player(DefaultMob(DefaultEntity(Vector(x, y), worldService)))
+        return Player(DefaultMob(DefaultEntity(Vector(x, y), 0.5F, worldService)))
     }
 }

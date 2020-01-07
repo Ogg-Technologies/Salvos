@@ -7,8 +7,8 @@ import com.oggtechnologies.salvos.utilities.shapes.implementations.Circle
 import com.oggtechnologies.salvos.utilities.shapes.implementations.Square
 
 class PlayerDrawer {
-    fun draw(circle: Circle, canvas: Canvas) {
+    fun draw(square: Square, canvas: Canvas) {
         SharedPaint.color = Color.GREEN
-        canvas.drawCircle(circle.pos.x, circle.pos.y, circle.radius, SharedPaint)
+        canvas.drawRect(square.left, square.top, square.right, square.bottom, SharedPaint)
     }
 }

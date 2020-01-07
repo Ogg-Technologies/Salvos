@@ -11,7 +11,7 @@ import com.oggtechnologies.salvos.utilities.Vector
 class DefaultModel : Updater, ModelViewer, ModelController {
     override val tileMap = TileMap()
     private val entityFactory = EntityFactory(WorldService(tileMap))
-    override val player: Player = entityFactory.createPlayer(2F, 2F)
+    override val player: Player = entityFactory.createPlayer(1.5F, 1.5F)
 
     override fun update() {
         player.update()

@@ -31,4 +31,12 @@ data class Vector(val x: Float, val y: Float) {
             this
         }
     }
+
+    fun setX(newX: Float): Vector {
+        return Vector(newX, x)
+    }
+
+    fun setY(newY: Float): Vector {
+        return Vector(x, newY)
+    }
 }
