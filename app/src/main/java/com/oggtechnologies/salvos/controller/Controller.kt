@@ -12,18 +12,20 @@ class Controller(private val model: ModelController, private val screenSize: Vec
     private val guiElements: MutableList<GUIElement> = ArrayList()
 
     init {
-        val movementJoystick: AbstractJoystick = object : AbstractJoystick(Vector(500F, screenSize.y-500F), 150F) {
-            override fun onDirChanged(dir: Vector) {
-                model.move(dir/10F)
+        val movementJoystick: AbstractJoystick =
+            object : AbstractJoystick(Vector(500F, screenSize.y - 500F), 150F) {
+                override fun onDirChanged(dir: Vector) {
+                    model.move(dir / 10F)
+                }
             }
-        }
         guiElements.add(movementJoystick)
 
-        val gunJoystick: AbstractJoystick = object : AbstractJoystick(Vector(screenSize.x-500F, screenSize.y-500F), 150F) {
-            override fun onDirChanged(dir: Vector) {
-                //println(dir)
+        val gunJoystick: AbstractJoystick =
+            object : AbstractJoystick(Vector(screenSize.x - 500F, screenSize.y - 500F), 150F) {
+                override fun onDirChanged(dir: Vector) {
+                    //TODO: implement a weapon
+                }
             }
-        }
         guiElements.add(gunJoystick)
     }
 
@@ -38,34 +40,38 @@ class Controller(private val model: ModelController, private val screenSize: Vec
      * @param event     MotionEvent triggered by the user
      */
     fun onTouchEvent(event: MotionEvent) {
-        val fingerIndex = event.actionIndex
-        val fingerID = event.getPointerId(fingerIndex)
-        val screenX = event.getX(fingerIndex)
-        val screenY = event.getY(fingerIndex)
-        val screenPos = Vector(screenX, screenY)
-        fun getScreenPos(fingerID: Int): Vector {
-            val screenX = event.getX(fingerID)
-            val screenY = event.getY(fingerID)
+
+        fun getScreenPos(fingerIndex: Int): Vector {
+            val screenX = event.getX(fingerIndex)
+            val screenY = event.getY(fingerIndex)
             return Vector(screenX, screenY)
         }
-        when (event.action and MotionEvent.ACTION_MASK) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> touchDown(
-                screenPos,
-                fingerID
-            )
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> touchRelease(
-                screenPos,
-                fingerID
-            )
-            MotionEvent.ACTION_MOVE -> {
-                for (pointerIndex in 0 until event.pointerCount) {
-                    println(pointerIndex)
-                    val id = event.getPointerId(pointerIndex)
-                    touchMove(getScreenPos(id), id)
+
+        val action = event.action and MotionEvent.ACTION_MASK
+
+        if (action == MotionEvent.ACTION_MOVE) {
+            /**
+             * Android doesn't provide actionIndex when it is a MOVE event. Therefore we call
+             * touchMove on all pointers when a finger moves.
+             */
+            for (index in 0 until event.pointerCount) {
+                val pos = getScreenPos(index)
+                val id = event.getPointerId(index)
+                touchMove(pos, id)
+            }
+        } else {
+            val index = event.actionIndex
+            val pos = getScreenPos(index)
+            val id = event.getPointerId(index)
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
+                    touchDown(pos, id)
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                    touchRelease(pos, id)
                 }
             }
         }
-
     }
 
     private fun touchDown(screenPos: Vector, fingerID: Int) {
