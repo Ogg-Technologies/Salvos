@@ -8,12 +8,15 @@ import java.lang.IllegalArgumentException
 import kotlin.math.ceil
 import kotlin.math.floor
 
-class DefaultEntity(override var pos: Vector, private val size: Float, private val worldService: WorldService) : Entity {
+class DefaultEntity(
+    override var pos: Vector,
+    private val size: Float,
+    override val worldService: WorldService,
+    override var vel: Vector = Vector()
+) : Entity {
 
     override val bounds: Square
         get() = Square.byCenter(pos, size)
-
-    override var vel: Vector = Vector()
 
     override fun update() {
         singleAxisMove(Vector(vel.x, 0F))
@@ -25,7 +28,7 @@ class DefaultEntity(override var pos: Vector, private val size: Float, private v
             throw IllegalArgumentException("Can only move one axis at a time")
         }
 
-        val nextBounds = Square.byCenter(pos+delta, size)
+        val nextBounds = Square.byCenter(pos + delta, size)
         if (!isColliding(nextBounds)) {
             pos += delta
         } else {
@@ -46,7 +49,7 @@ class DefaultEntity(override var pos: Vector, private val size: Float, private v
         val curY = pos.y
         var newX = curX
         var newY = curY
-        val halfSize = size/2
+        val halfSize = size / 2
         val wallPadding = 0.001F
         when {
             delta.x > 0 -> newX = ceil(curX) - halfSize - wallPadding
@@ -63,8 +66,8 @@ class DefaultEntity(override var pos: Vector, private val size: Float, private v
     }
 
     private fun isColliding(b: Square): Boolean {
-        val xRange = floor(b.pos.x-b.size).toInt() .. floor(b.pos.x+b.size).toInt()
-        val yRange = floor(b.pos.y-b.size).toInt() .. floor(b.pos.y+b.size).toInt()
+        val xRange = floor(b.pos.x - b.size).toInt()..floor(b.pos.x + b.size).toInt()
+        val yRange = floor(b.pos.y - b.size).toInt()..floor(b.pos.y + b.size).toInt()
         for (x in xRange) {
             for (y in yRange) {
                 if (!worldService.canGoThrough(x, y)) {

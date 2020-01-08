@@ -3,9 +3,11 @@ package com.oggtechnologies.salvos.view
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.provider.CalendarContract
 import com.oggtechnologies.salvos.model.ModelViewer
 import com.oggtechnologies.salvos.model.map.tiles.Tile
 import com.oggtechnologies.salvos.model.map.tiles.TileFactory
+import com.oggtechnologies.salvos.utilities.SharedPaint
 import com.oggtechnologies.salvos.utilities.shapes.implementations.Square
 import com.oggtechnologies.salvos.utilities.Vector
 import com.oggtechnologies.salvos.utilities.shapes.implementations.Circle
@@ -26,8 +28,9 @@ class View(private val model: ModelViewer, private val screenSize: Vector) {
 
     fun draw(canvas: Canvas) {
         val player = model.player
-        drawTiles(player.pos, canvas, screenSize)
-        drawPlayer(canvas, screenSize)
+        drawTiles(player.pos, canvas)
+        drawPlayer(canvas)
+        drawProjectiles(canvas)
 
 
         val paint = Paint()
@@ -36,12 +39,25 @@ class View(private val model: ModelViewer, private val screenSize: Vector) {
         canvas.drawText("X: ${model.player.pos.x} Y: ${model.player.pos.y}", 60F, 100F, paint)
     }
 
-    private fun drawPlayer(canvas: Canvas, screenSize: Vector) {
+    private fun drawProjectiles(canvas: Canvas) {
+        SharedPaint.color = Color.YELLOW
+        for (p in model.projectiles) {
+            val pos = worldToScreenPos(p.pos)
+            val size = p.bounds.size*tileSize/2
+            val left = pos.x-size
+            val top = pos.y-size
+            val right = pos.x+size
+            val bottom = pos.y+size
+            canvas.drawRect(left, top, right, bottom, SharedPaint)
+        }
+    }
+
+    private fun drawPlayer(canvas: Canvas) {
         val square = Square.byCenter(screenSize/2F, tileSize*model.player.bounds.size)
         playerDrawer.draw(square, canvas)
     }
 
-    private fun drawTiles(playerPos: Vector, canvas: Canvas, screenSize: Vector) {
+    private fun drawTiles(playerPos: Vector, canvas: Canvas) {
         val originTileScreenPos = calculateOriginTileScreenPos(playerPos, screenSize, tileSize)
         for (tileY in 0 until model.tileMap.mapSize) {
             for (tileX in 0 until model.tileMap.mapSize) {
@@ -57,6 +73,12 @@ class View(private val model: ModelViewer, private val screenSize: Vector) {
                 )
             }
         }
+    }
+
+    private fun worldToScreenPos(worldPos: Vector): Vector {
+        val originTileScreenPos = calculateOriginTileScreenPos(model.player.pos, screenSize, tileSize)
+        val screenPos = originTileScreenPos + worldPos*tileSize
+        return screenPos
     }
 
     private fun calculateOriginTileScreenPos(playerPos: Vector, screenSize: Vector, tileSize: Float): Vector {

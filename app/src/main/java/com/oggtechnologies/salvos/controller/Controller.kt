@@ -17,14 +17,24 @@ class Controller(private val model: ModelController, private val screenSize: Vec
                 override fun onDirChanged(dir: Vector) {
                     model.move(dir / 10F)
                 }
+
+                override fun onPressed(dir: Vector) {}
+                override fun onReleased(dir: Vector) {}
             }
         guiElements.add(movementJoystick)
 
         val gunJoystick: AbstractJoystick =
             object : AbstractJoystick(Vector(screenSize.x - 500F, screenSize.y - 500F), 150F) {
                 override fun onDirChanged(dir: Vector) {
-                    //TODO: implement a weapon
+                    model.aimGun(dir)
                 }
+                override fun onPressed(dir: Vector) {
+                    model.startChargeGun(dir)
+                }
+                override fun onReleased(dir: Vector) {
+                    model.shootGun(dir)
+                }
+
             }
         guiElements.add(gunJoystick)
     }

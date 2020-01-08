@@ -18,23 +18,25 @@ abstract class AbstractJoystick(pos: Vector, radius: Float) : GUIElement {
     private val dir: Vector
         get() = headDeltaPos/bounds.radius
 
-    override fun touchDown(screenPos: Vector, fingerID: Int) {
+    final override fun touchDown(screenPos: Vector, fingerID: Int) {
         if (touchIsOnJoystick(screenPos)) {
             touchedFingerID = fingerID
             lastTouchPos = screenPos
+            onPressed(dir)
             onDirChanged(dir)
         }
     }
 
-    override fun touchRelease(screenPos: Vector, fingerID: Int) {
+    final override fun touchRelease(screenPos: Vector, fingerID: Int) {
         if (fingerID == touchedFingerID) {
+            onReleased(dir)
             touchedFingerID = null
             lastTouchPos = bounds.pos
             onDirChanged(dir)
         }
     }
 
-    override fun touchMove(screenPos: Vector, fingerID: Int) {
+    final override fun touchMove(screenPos: Vector, fingerID: Int) {
         if (fingerID == touchedFingerID) {
             lastTouchPos = screenPos
             onDirChanged(dir)
@@ -42,12 +44,14 @@ abstract class AbstractJoystick(pos: Vector, radius: Float) : GUIElement {
     }
 
     abstract fun onDirChanged(dir: Vector)
+    abstract fun onPressed(dir: Vector)
+    abstract fun onReleased(dir: Vector)
 
     private fun touchIsOnJoystick(touchPos: Vector): Boolean {
         return bounds collidingWith Point(touchPos)
     }
 
-    override fun draw(canvas: Canvas) {
+    final override fun draw(canvas: Canvas) {
         SharedPaint.color = Color.GRAY
         SharedPaint.alpha = 200
         canvas.drawCircle(bounds.pos.x, bounds.pos.y, bounds.radius, SharedPaint)
