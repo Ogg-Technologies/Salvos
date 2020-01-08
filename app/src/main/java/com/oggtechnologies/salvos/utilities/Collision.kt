@@ -93,6 +93,6 @@ private object Collision {
 
         var dx=distX-b.width/2
         var dy=distY-b.height/2
-        return (dx*dx+dy*dy<= c.radius.toDouble().pow(2.0));
+        return (dx*dx+dy*dy<= c.radius.toDouble().pow(2.0))
     }
 }

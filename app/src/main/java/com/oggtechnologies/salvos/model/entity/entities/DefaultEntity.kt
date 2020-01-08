@@ -16,7 +16,6 @@ class DefaultEntity(override var pos: Vector, private val size: Float, private v
     override var vel: Vector = Vector()
 
     override fun update() {
-        println(vel)
         singleAxisMove(Vector(vel.x, 0F))
         singleAxisMove(Vector(0F, vel.y))
     }

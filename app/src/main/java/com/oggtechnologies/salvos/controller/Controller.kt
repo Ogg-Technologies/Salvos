@@ -1,12 +1,10 @@
 package com.oggtechnologies.salvos.controller
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.view.MotionEvent
 import com.oggtechnologies.salvos.controller.gui.AbstractJoystick
 import com.oggtechnologies.salvos.controller.gui.GUIElement
 import com.oggtechnologies.salvos.model.ModelController
-import com.oggtechnologies.salvos.utilities.SharedPaint
 import com.oggtechnologies.salvos.utilities.Vector
 
 class Controller(private val model: ModelController, private val screenSize: Vector) {
@@ -14,13 +12,19 @@ class Controller(private val model: ModelController, private val screenSize: Vec
     private val guiElements: MutableList<GUIElement> = ArrayList()
 
     init {
-        val joystick: AbstractJoystick = object : AbstractJoystick(Vector(500F, screenSize.y-500F), 150F) {
+        val movementJoystick: AbstractJoystick = object : AbstractJoystick(Vector(500F, screenSize.y-500F), 150F) {
             override fun onDirChanged(dir: Vector) {
                 model.move(dir/10F)
             }
         }
-        guiElements.add(joystick)
+        guiElements.add(movementJoystick)
 
+        val gunJoystick: AbstractJoystick = object : AbstractJoystick(Vector(screenSize.x-500F, screenSize.y-500F), 150F) {
+            override fun onDirChanged(dir: Vector) {
+                //println(dir)
+            }
+        }
+        guiElements.add(gunJoystick)
     }
 
     fun draw(canvas: Canvas) {
@@ -39,6 +43,11 @@ class Controller(private val model: ModelController, private val screenSize: Vec
         val screenX = event.getX(fingerIndex)
         val screenY = event.getY(fingerIndex)
         val screenPos = Vector(screenX, screenY)
+        fun getScreenPos(fingerID: Int): Vector {
+            val screenX = event.getX(fingerID)
+            val screenY = event.getY(fingerID)
+            return Vector(screenX, screenY)
+        }
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> touchDown(
                 screenPos,
@@ -48,8 +57,15 @@ class Controller(private val model: ModelController, private val screenSize: Vec
                 screenPos,
                 fingerID
             )
-            MotionEvent.ACTION_MOVE -> touchMove(screenPos, fingerID)
+            MotionEvent.ACTION_MOVE -> {
+                for (pointerIndex in 0 until event.pointerCount) {
+                    println(pointerIndex)
+                    val id = event.getPointerId(pointerIndex)
+                    touchMove(getScreenPos(id), id)
+                }
+            }
         }
+
     }
 
     private fun touchDown(screenPos: Vector, fingerID: Int) {
