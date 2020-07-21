@@ -11,7 +11,7 @@ abstract class Gun {
 
     private var charge = 0F
     private val maxCharge = 0.5F
-    private val chargeRate = 0.001F
+    private val chargeRate = 0.010F
     private var isCharging = false
 
     fun update() {
@@ -36,6 +36,7 @@ abstract class Gun {
         isCharging = false
         aim(dir)
         shoot(dir * charge)
+        charge = 0F
     }
 
     fun aim(dir: Vector) {
