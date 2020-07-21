@@ -5,9 +5,11 @@ import com.oggtechnologies.salvos.model.entity.EntityFactory
 import com.oggtechnologies.salvos.model.entity.entities.Entity
 import com.oggtechnologies.salvos.model.entity.entities.mobs.Player
 import com.oggtechnologies.salvos.model.map.TileMap
-import com.oggtechnologies.salvos.utilities.Vector
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DefaultModel : Updater, ModelViewer, ModelController {
+    private val commands: Queue<ControllerCommand> = ArrayDeque()
     override val tileMap = TileMap()
     override val projectiles: MutableList<Entity> = ArrayList()
     private val worldService = WorldService(tileMap, projectiles)
@@ -16,25 +18,34 @@ class DefaultModel : Updater, ModelViewer, ModelController {
 
 
     override fun update() {
+        executeCommands()
         player.update()
         for (p in projectiles) {
             p.update()
         }
     }
 
-    override fun move(dir: Vector) {
-        player.goalVel = dir
+    private fun executeCommands() {
+        synchronized(commands) {
+            while (commands.size > 0) {
+                val command = commands.remove()
+                executeCommand(command)
+            }
+        }
     }
 
-    override fun startChargeGun(dir: Vector) {
-        player.startChargeGun(dir)
+    private fun executeCommand(command: ControllerCommand) {
+        when (command) {
+            is Move -> player.goalVel = command.dir
+            is StartChargeGun -> player.startChargeGun(command.dir)
+            is ShootGun -> player.shootGun(command.dir)
+            is AimGun -> player.aimGun(command.dir)
+        }
     }
 
-    override fun shootGun(dir: Vector) {
-        player.shootGun(dir)
-    }
-
-    override fun aimGun(dir: Vector) {
-        player.aimGun(dir)
+    override fun sendCommand(command: ControllerCommand) {
+        synchronized(commands) {
+            commands.add(command)
+        }
     }
 }

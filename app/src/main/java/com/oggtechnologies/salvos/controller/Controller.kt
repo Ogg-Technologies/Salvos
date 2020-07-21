@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 import com.oggtechnologies.salvos.controller.gui.AbstractJoystick
 import com.oggtechnologies.salvos.controller.gui.GUIElement
-import com.oggtechnologies.salvos.model.ModelController
+import com.oggtechnologies.salvos.model.*
 import com.oggtechnologies.salvos.utilities.Vector
 
 class Controller(private val model: ModelController, private val screenSize: Vector) {
@@ -15,7 +15,7 @@ class Controller(private val model: ModelController, private val screenSize: Vec
         val movementJoystick: AbstractJoystick =
             object : AbstractJoystick(Vector(500F, screenSize.y - 500F), 150F) {
                 override fun onDirChanged(dir: Vector) {
-                    model.move(dir / 10F)
+                    model.sendCommand(Move(dir / 10F))
                 }
 
                 override fun onPressed(dir: Vector) {}
@@ -26,13 +26,13 @@ class Controller(private val model: ModelController, private val screenSize: Vec
         val gunJoystick: AbstractJoystick =
             object : AbstractJoystick(Vector(screenSize.x - 500F, screenSize.y - 500F), 150F) {
                 override fun onDirChanged(dir: Vector) {
-                    model.aimGun(dir)
+                    model.sendCommand(AimGun(dir))
                 }
                 override fun onPressed(dir: Vector) {
-                    model.startChargeGun(dir)
+                    model.sendCommand(StartChargeGun(dir))
                 }
                 override fun onReleased(dir: Vector) {
-                    model.shootGun(dir)
+                    model.sendCommand(ShootGun(dir))
                 }
 
             }
